@@ -1,3 +1,6 @@
+#include <iostream>
+using namespace std;
+
 class Solution {
 public:
     int maxSubArray(int A[], int n) {
@@ -6,11 +9,6 @@ public:
         int max = A[0], min=A[0], sum=A[0], res=A[0];
         for(int i=1;i<n;++i){
             sum+=A[i];
-
-            if(sum-min>res){
-            	res = sum-min;
-            }
-
             if(sum>max){
                 max = sum;
                 if(max>res) res = max;
@@ -28,3 +26,9 @@ public:
         return res;
     }
 };
+
+int main(){
+	int A[4] = {0, -3, 1, 1};
+	Solution s;
+	cout << s.maxSubArray(A, 4) << endl;
+}
