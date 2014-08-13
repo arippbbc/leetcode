@@ -1,9 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <functional>
-#include <unordered_map>
-using namespace std;
 class Solution {
 public:
 
@@ -39,14 +33,3 @@ public:
     }
 };
 
-int main(){
-    Solution s;
-    vector<int> v = {3, 2, 4};
-    int x = 6;
-    vector<int> ix = s.twoSum(v, x);
-
-    for(auto &i: ix){
-        cout << i << "|";
-    }
-    cout << endl;
-}
