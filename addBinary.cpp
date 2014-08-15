@@ -1,10 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <functional>
-#include <unordered_map>
-#include <string>
-using namespace std;
 class Solution {
 public:
     string bitAdd(char a, char b, int &inc){
@@ -35,11 +28,3 @@ public:
         return addBinary(b, a);
     }
 };
-
-int main(){
-    Solution s;
-    string a = "0";
-    string b = "0";
-    cout << s.addBinary(a, b).size() << endl;
-    cout << s.addBinary(a, b) << endl;
-}
