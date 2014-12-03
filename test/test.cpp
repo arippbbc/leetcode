@@ -4,12 +4,20 @@
 #include <functional>
 #include <unordered_map>
 #include <string>
+#include <set>
 using namespace std;
 
 struct ListNode {
     int val;
     ListNode *next;
     ListNode(int x) : val(x), next(NULL) {}
+};
+
+struct Point {
+    int x;
+    int y;
+    Point() : x(0), y(0) {}
+    Point(int a, int b) : x(a), y(b) {}
 };
 
 class Solution {
@@ -26,17 +34,32 @@ public:
     }
 
     string addBinary(string a, string b) {
+        if(a=="0" && b=="0") return "0";
         int x = a.size(), y = b.size();
         if(x<=y){
             if(x==0) return b;
             string s = ""; 
             cout << s << endl;
             int inc = 0;
+            /*
             for(int i=y-1; i>=0; --i){
                 if(i-y+x>=0) s = bitAdd(a[i-y+x], b[i], inc) + s;
                 else s = bitAdd('0', b[i], inc) + s; 
             }
             if(inc) s = "1" + s;
+            return s;
+            */
+
+            int i = x, j = y;
+            while(i){
+                s = bitAdd(a[i-1], b[j-1], inc) + s;
+                --i; --j;
+            }
+
+            while(j){
+                s = bitAdd('0', b[j-1], inc) + s;
+                --j;
+            }
             return s;
         }
         return addBinary(b, a);
@@ -82,6 +105,72 @@ public:
 		t1->next = t1->next->next;
 		return head;
 	}
+
+	int strStr(char *haystack, char *needle) {
+		int res;
+		char *p;
+		for(p=needle, res=0; p!='\0' && haystack!='\0'; ++haystack){
+			while(p!='\0' && haystack!='\0' && *p==*haystack){
+				++p; ++haystack; ++ res;
+			}
+
+			if(!p) return res;
+			if(!haystack) return -1;
+		}
+	}
+
+	bool sameLine(Point &p1, Point &p2, Point &p3){
+		return (p3.y-p2.y)*(p2.x-p1.x) == (p2.y-p1.y)*(p3.x-p2.x);
+	}
+
+	bool samePoint(Point &p1, Point &p2){
+		return p1.x==p2.x && p1.y==p2.y;
+	}
+
+	/*
+	int maxPoints(vector<Point> &points) {
+		set<Point> s(points.begin(), points.end());
+		if(s.size()<=2) return s.size();
+
+		int res = 2, cur = 2;
+		for(auto p1 = points.begin(); p1!=--(--points.begin()); ++p1){
+			for(auto p2 = ++p1; p2!=--points.begin(); ++p2){
+				cur = 2;
+				for(auto p3 = ++p2; p3!=points.begin(); ++p3){
+					if(sameLine(*p1, *p2, *p3)){
+						++cur;
+					}
+				}
+				if(cur>res) res = cur;
+			}
+		}
+		return res;
+	}
+	*/
+
+	ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+		int a=0, b=0;
+		ListNode *tmpA = headA, *tmpB = headB;
+		while(tmpA) { ++a; tmpA = tmpA->next; }
+		while(tmpB) { ++b; tmpA = tmpB->next; }
+
+		tmpA = headA;
+		tmpB = headB;
+		if(a>b){
+			for(int i=0; i!=a-b; ++i) tmpA = tmpA->next;
+		}
+		else {
+			for(int i=0; i!=b-a; ++i) tmpB = tmpB->next;
+		}
+
+		for(int i=0; i!=min(a,b); ++i) {
+			if(tmpA == tmpB) return tmpA;
+			tmpA = tmpA->next;
+			tmpB = tmpB->next;
+		}
+		return NULL;
+	}
+
 };
 
 template<class T>
@@ -94,11 +183,25 @@ void print(const T& t){
 
 int main(){
     Solution s;
-    string a = "0";
-    string b = "0";
+    ListNode *headA = NULL;
+    ListNode *headB = new ListNode(2);
+
+    s.getIntersectionNode(headA, headB);
+    /*
+    vector<Point> points;
+    s.maxPoints(points);
+    */
+
+    /*
+    string a = "1";
+    string b = "1";
     //cout << s.addBinary(a, b).size() << endl;
     //cout << s.addBinary(a, b) << endl;
-    for(int i=5; i!=6; ++i){
-    	print(s.getRow(i));
-    }
+	*/
+
+    /*
+    char *haystack = "";
+    char *needle = "";
+    cout << s.strStr(haystack, needle) << endl;
+    */
 }
