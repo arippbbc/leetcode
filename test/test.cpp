@@ -5,6 +5,12 @@
 #include <unordered_map>
 #include <string>
 #include <set>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <sstream>
+#include <algorithm>
+
 using namespace std;
 
 struct ListNode {
@@ -31,6 +37,8 @@ public:
         if(a=='1' && b=='0' && inc==1){inc = 1; return '0';}
         if(a=='1' && b=='1' && inc==0){inc = 1; return '0';}
         if(a=='1' && b=='1' && inc==1){inc = 1; return '1';}
+        /* should not go here */
+        else {inc = 0; return '0';}
     }
 
     string addBinary(string a, string b) {
@@ -107,6 +115,7 @@ public:
 	}
 
 	int strStr(char *haystack, char *needle) {
+        if(!haystack || haystack=='\0') return -1;
 		int res;
 		char *p;
 		for(p=needle, res=0; p!='\0' && haystack!='\0'; ++haystack){
@@ -117,6 +126,7 @@ public:
 			if(!p) return res;
 			if(!haystack) return -1;
 		}
+		return -1;
 	}
 
 	bool sameLine(Point &p1, Point &p2, Point &p3){
@@ -171,6 +181,78 @@ public:
 		return NULL;
 	}
 
+	string int2str(int a){
+		stringstream ss;
+		ss << a;
+		return ss.str();
+	}
+
+	string say(const string &s){
+		int cnt = 1;
+		char x = s[0];
+		string res = "";
+
+		for(size_t i=1; i<s.size(); ++i){
+			if(s[i]==x){
+				++cnt;
+			}
+			else{
+				res += int2str(cnt) + x;
+				x = s[i];
+				cnt = 1;
+			}
+		}
+
+		res += int2str(cnt) + x;
+		return res;
+	}
+
+	string countAndSay(int n) {
+		if(n==1) return "1";
+		else return say(countAndSay(n-1));
+	}
+
+    int atoi(const char *str) {
+        if(*str=='\0') return 0;
+        bool neg = false;
+        if(*str=='-'){
+        	neg = true;
+        	++str;
+        }
+
+        int res = 0;
+        while(*str!='\0'){
+            if(*str>='0' && *str <='9') {
+                res = 10*res + int(*str-'0');
+                cout << res << endl;
+                if(res<0) return 0; //overflow;
+            }
+            ++str;
+        }
+        return neg?-res:res;
+    }
+
+	int findMin(vector<int> &num) {
+		int sz = num.size();
+
+		if(sz == 1) return num[0];
+		if(sz == 2) return min(num[0], num[1]);
+
+		int i = 0, j = sz-1, k = j/2;
+		while(i<j){
+			if(num[i]>num[k]){
+				j = k;
+			}
+
+			if(num[i]<num[k]){
+				i = k;
+			}
+
+			k = (i+j)/2;
+		}
+		return num[i];
+	}
+
 };
 
 template<class T>
@@ -183,10 +265,28 @@ void print(const T& t){
 
 int main(){
     Solution s;
+
+    vector<int> x{1,2,3};
+    cout << s.findMin(x) << endl;
+    //int x = s.atoi("-1");
+    //cout << x << endl;
+
+    /*
+    vector<int> x{1,2,3,4,5,6,7,8,9,0};
+    for_each(x.begin(), x.end(), [](int x){cout << x << "|";});
+    */
+
+    /* count and say
+    cout << s.countAndSay(4) << endl;
+    */
+
+    /*
     ListNode *headA = NULL;
     ListNode *headB = new ListNode(2);
 
     s.getIntersectionNode(headA, headB);
+    */
+
     /*
     vector<Point> points;
     s.maxPoints(points);
@@ -199,7 +299,7 @@ int main(){
     //cout << s.addBinary(a, b) << endl;
 	*/
 
-    /*
+    /* strStr
     char *haystack = "";
     char *needle = "";
     cout << s.strStr(haystack, needle) << endl;
