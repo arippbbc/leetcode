@@ -212,6 +212,7 @@ public:
 		else return say(countAndSay(n-1));
 	}
 
+	/*
     int atoi(const char *str) {
         if(*str=='\0') return 0;
         bool neg = false;
@@ -231,6 +232,7 @@ public:
         }
         return neg?-res:res;
     }
+    */
 
 	int findMin(vector<int> &num) {
 		int sz = num.size();
@@ -252,7 +254,57 @@ public:
 		}
 		return num[i];
 	}
+#include <cstdlib>
+    void parseVersion(string &v, int &x, int &y){
+        size_t n = v.find('.');
+        if (n == std::string::npos) {
+            x = atoi(v.c_str());
+            y = 0;
+        }
+        else{
+            x = atoi(v.substr(0, n).c_str());
+            y = atoi(v.substr(n+1, v.size()-n).c_str());
+        }
+    }
 
+    int numDigits(int number){
+        if(number==0) return 1;
+
+        int digits = 0;
+        while (number) {
+            number /= 10;
+            digits++;
+        }
+        return digits;
+    }
+
+    int compare(int v1, int v2){
+        int d1 = numDigits(v1), d2 = numDigits(v2);
+        if(d1<=d2){
+            for(auto i=0; i<d2-d1; ++i){
+                v1 *=10;
+            }
+
+            if(v1>v2) return 1;
+            if(v1<v2) return -1;
+            if(v1==v2) return 0;
+        }
+
+        else return compare(v2, v1);
+    }
+
+    int compareVersion(string version1, string version2) {
+        int x1, x2, y1, y2;
+        parseVersion(version1, x1, y1);
+        parseVersion(version2, x2, y2);
+        if(x1<x2) return -1;
+        if(x1>x2) return 1;
+        if(x1==x2){
+            if(y1<y2) return -1;
+            if(y1>y2) return 1;
+            return 0;
+        }
+    }
 };
 
 template<class T>
@@ -265,9 +317,18 @@ void print(const T& t){
 
 int main(){
     Solution s;
-
+    /*
     vector<int> x{1,2,3};
     cout << s.findMin(x) << endl;
+    */
+
+    string v = "01.1";
+    int x, y;
+
+    s.parseVersion(v, x, y);
+    cout << s.numDigits(y) << endl;
+
+    cout << x << "|" << y << endl;
     //int x = s.atoi("-1");
     //cout << x << endl;
 
